@@ -1,8 +1,25 @@
 # Initial setup: accounts, keys and first tasks
 
-The initial route uses Comfy Cloud for generation and local native gameplay. Local ComfyUI Desktop, a custom deployment and Matrix neural weights are not prerequisites for the first proof. Application implementation has not started; the environment files below prepare its configuration contract.
+Native gameplay preparation does not require a Comfy subscription, key, or neural weights. Generation can use a supported Cloud account or self-hosted ComfyUI. Application implementation has not started; the environment files below prepare its configuration contract.
 
-## What the maintainer needs to do
+## No paid Comfy plan? Start here
+
+Do not subscribe just to unblock development. We can build the native racer, phone controls, projector output, clean recording and mocked generation queue without Comfy API access.
+
+For generation, choose an available route:
+
+| Route | Cloud subscription/key needed? | Limitation |
+|---|---|---|
+| Self-hosted ComfyUI + official v2 proxy | No paid Cloud subscription; no key by default on local proxy | Needs suitable hardware, storage and a tested workflow. Free software does not make rented compute free. |
+| Free Cloud browser trial, if runs remain | No paid workflow API access for manual browser use | Run a supported workflow manually, save its output, then import it. Label this manual handoff; it is not automated app/API integration. |
+| Event-provided access | Unknown until confirmed | Ask whether supplied credits include API entitlement or sponsored GPU access. |
+| Paid Cloud API | Yes | Optional later choice with explicit budget. |
+
+The self-hosted v2 route runs ComfyUI at `127.0.0.1:8188` and `comfy-api-proxy` at `127.0.0.1:8189`. After installation and verification, configure `COMFY_BASE_URL=http://127.0.0.1:8189`; a local static token is optional. Keep the default unauthenticated proxy on loopback. This is a supported route, not an installed service in this repository. [Official v2 self-hosting](https://docs.comfy.org/api-reference/v2/overview)
+
+Do not assume large video models will run practically on an untested laptop. Start with a small compatible workflow or obtain suitable event hardware. The competition allows ComfyUI to run wherever you choose and advertises credits for early signups; availability and API access must be checked. [Competition page](https://comfy.org/open-source-higgsfield)
+
+## If using paid or event-enabled Comfy Cloud API access
 
 1. Sign into [Comfy Cloud](https://cloud.comfy.org) with the intended hackathon account.
 2. Confirm the account has paid workflow API access and available credits. A free browser trial is not sufficient for the workflow API. Check any event-credit entitlement before purchasing; do not assume promotional credits also grant API access. [Official Cloud setup](https://docs.comfy.org/development/deploy/cloud)
