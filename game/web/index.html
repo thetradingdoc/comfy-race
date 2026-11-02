@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#090b10" />
+  <meta name="description" content="Comfy Race. Real multiplayer city racing. Join the same race from your phone and drive together on the big screen." />
+  <title>Comfy Race — The city is yours.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23ff6838'/%3E%3Cpath d='M10 12h21l-4 6H14l-3 5h13l-4 6H4z' fill='%23090b10'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <canvas id="race-canvas" aria-label="Illustrative car showcase"></canvas>
+  <canvas id="native-stage" aria-label="Actual Matrix native game camera feeds" hidden></canvas>
+  <video id="ai-output" autoplay playsinline muted hidden></video>
+  <div class="cinematic-vignette"></div>
+  <div id="app">
+    <header class="topbar" id="topbar">
+      <button class="brand" id="brand-home" aria-label="Comfy Race home"><span class="brand-mark">↗</span><span>COMFY<span class="brand-light">RACE</span></span><small>AFTER HOURS</small></button>
+      <nav><button class="nav-link active" data-nav="home">Race</button><button class="nav-link" id="how-button">How to play</button><a class="nav-link" href="https://github.com/thetradingdoc/comfy-race" target="_blank" rel="noreferrer">The build ↗</a></nav>
+      <button class="mode-badge" id="system-button"><span class="status-dot"></span><span id="render-status">ENGINE RENDERED</span><span class="badge-help">ⓘ</span></button>
+    </header>
+
+    <main id="home" class="screen home-screen">
+      <div class="hero-copy"><div class="eyebrow"><span></span> REAL PLAYERS. ONE CITY.</div><h1>THE CITY<br>IS <em>YOURS.</em></h1><p class="hero-description">Night falls. The streets open.<br>Bring your friends. Leave them behind.</p>
+        <div class="hero-actions"><button id="create-open" class="button primary">CREATE A RACE <span>↗</span></button><button id="join-open" class="button secondary">JOIN WITH CODE</button></div>
+        <div class="hero-details"><span id="driver-capacity"><i>↔</i> <span id="capacity-label">2 DRIVER SLOTS</span></span><span><i>▱</i> PHONE CONTROLLERS</span><span><i>◷</i> CHECKPOINT SPRINT</span></div>
+      </div>
+      <div class="hero-car-label"><span class="tiny-label">ILLUSTRATIVE CAR SHOWCASE</span><strong>VOLT / 01</strong><span>ALL DRIVE. NO DOWNLOAD.</span></div>
+      <div class="chapter-bar"><div class="chapter-heading"><span class="tiny-label">CHOOSE YOUR CHAPTER</span><strong>Where the night takes you.</strong></div><div class="chapter-options" id="chapter-options">
+        <button class="chapter active" data-city="nairobi"><span class="chapter-num">01</span><span><b>NAIROBI</b><small>Midnight delivery</small></span><i>↗</i></button>
+        <button class="chapter" data-city="tokyo"><span class="chapter-num">02</span><span><b>TOKYO</b><small>Neon circuit</small></span><i>↗</i></button>
+        <button class="chapter" data-city="new-york"><span class="chapter-num">03</span><span><b>NEW YORK</b><small>After-hours run</small></span><i>↗</i></button>
+      </div></div>
+      <footer class="home-footer"><span>BUILT TOGETHER. RACED TOGETHER.</span><span>NATIVE MATRIX GAMEPLAY <b>●</b> COMFYUI INTEGRATION PLANNED</span></footer>
+    </main>
+
+    <main id="lobby" class="screen lobby-screen" hidden>
+      <div class="lobby-title"><div><span class="eyebrow">THE STARTING LINE</span><h2>YOUR CREW.<br>YOUR <em>RACE.</em></h2><p id="lobby-subtitle">Join the same room. Get ready. Settle it on the street.</p></div><div class="room-code-panel"><span class="tiny-label">ROOM CODE</span><strong id="room-code">—</strong><button id="copy-link" class="text-button">COPY INVITE LINK ↗</button></div></div>
+      <div class="lobby-grid"><section class="panel roster-panel"><div class="panel-heading"><h3>THE GRID <span id="player-count">0 / 2</span></h3><span class="tiny-label">2 HUMAN DRIVERS TO START</span></div><div id="roster"></div><div class="lobby-notice" id="lobby-notice">Waiting for your crew.</div><div class="lobby-buttons"><button id="ready-button" class="button primary">I'M READY <span>✓</span></button><button id="start-button" class="button secondary" hidden>START RACE ↗</button></div></section>
+        <section class="panel invite-panel"><div id="qr-wrap"><canvas id="qr-code"></canvas></div><div><span class="tiny-label">SCAN. JOIN. DRIVE.</span><h3>YOUR PHONE<br>IS THE KEY.</h3><p>Scan to join as a driver. Watch the big screen; steer on your phone.</p><a id="invite-url" href="#">Preparing invite…</a></div><p class="network-note" id="network-note">Phones and projector need access to the same game server.</p></section></div>
+      <section class="mission-strip"><span class="mission-icon">◎</span><div><span class="tiny-label" id="mission-city">NAIROBI / CHAPTER 01</span><h3 id="mission-name">Midnight delivery</h3><p id="mission-brief">Follow the native route. Pass its checkpoints. Deliver first.</p></div><div class="mission-type"><span>STORY SOURCE</span><b>AUTHORED STARTER</b></div></section>
+      <button id="leave-lobby" class="text-button leave-button">← LEAVE ROOM</button>
+    </main>
+
+    <main id="race" class="screen race-screen" hidden>
+      <div class="race-top"><div class="race-chapter"><span class="eyebrow" id="race-city">NAIROBI / NIGHT RUN</span><h3 id="race-mission">MIDNIGHT DELIVERY</h3></div><div class="race-timer"><span class="tiny-label">RACE TIME</span><strong id="race-time">00:00.00</strong></div><div class="race-mode"><span class="status-dot"></span><span id="race-source-label">NATIVE MATRIX</span><select id="quality-select" aria-label="Display canvas resolution"><option value="auto">AUTO</option><option value="1080p">1080P</option><option value="4k">4K CANVAS</option></select><button id="ai-button" type="button">AI SETUP</button></div></div>
+      <div id="viewport-labels" class="viewport-labels"></div><div id="countdown" class="countdown" hidden><span id="countdown-label">LIGHTS OUT IN</span><strong id="countdown-number">3</strong><p id="pause-reason" hidden></p><button id="pause-ready-button" class="button primary" hidden>READY TO RESUME ✓</button><button id="resume-button" class="button secondary" hidden>RESUME RACE ↗</button></div>
+      <div class="race-bottom"><div class="race-objective"><span class="tiny-label">THE OBJECTIVE</span><strong id="live-objective">Follow the route. Pass every checkpoint.</strong><span id="race-connection"><i class="status-dot"></i> CONNECTED TO RACE AUTHORITY</span></div><div class="race-tip">WASD / ARROWS TO DRIVE <span>SPACE TO BRAKE · R TO RECOVER (+5S)</span><button id="race-leave" class="text-button">LEAVE RACE ↗</button></div></div>
+    </main>
+
+    <main id="controller" class="screen controller-screen" hidden>
+      <div class="controller-top"><span class="eyebrow" id="controller-name">YOUR DRIVER</span><span id="controller-connection" class="connected-pill">● CONNECTED</span></div>
+      <div class="controller-dashboard"><div><span class="tiny-label">POSITION</span><strong id="controller-position">—<small> / —</small></strong></div><div><span class="tiny-label">LAP</span><strong id="controller-lap">—<small> / 1</small></strong></div><div><span class="tiny-label">KM/H</span><strong id="controller-speed">0</strong></div></div>
+      <div class="phone-mission"><span class="tiny-label">EYES ON THE BIG SCREEN</span><h3 id="phone-objective">Stay sharp. Chase the lead.</h3><p id="phone-race-status">Waiting for the race to start.</p></div>
+      <button id="phone-resume-ready" class="button primary" hidden>READY TO RESUME ✓</button>
+      <div class="touch-controls"><div class="steering-controls"><button class="touch-button steer" id="steer-left" aria-label="Steer left">‹</button><button class="touch-button steer" id="steer-right" aria-label="Steer right">›</button></div><div class="pedal-controls"><button class="touch-button brake" id="brake">BRAKE</button><button class="touch-button throttle" id="throttle">GAS <span>↑</span></button></div></div><p class="controller-help">Hold GAS to accelerate. Hold an arrow to steer.<br>Release to coast. Brake before the bend.</p><button id="phone-recover" class="text-button">RECOVER CAR (+5S)</button><button id="phone-leave" class="text-button">LEAVE ROOM</button>
+    </main>
+
+    <main id="results" class="screen results-screen" hidden><div class="results-heading"><span class="eyebrow">THE STREET HAS SPOKEN</span><h2 id="results-title">RACE<br><em>COMPLETE.</em></h2><p id="results-summary">Results from the authoritative race server.</p></div><section class="panel results-panel"><div class="panel-heading"><h3>FINAL CLASSIFICATION</h3><span class="tiny-label" id="results-city">NAIROBI</span></div><div id="results-list"></div><div class="results-actions"><button id="rematch-button" class="button primary">RUN IT BACK <span>↗</span></button><button id="results-leave" class="button secondary">BACK TO HOME</button></div></section></main>
+  </div>
+
+  <dialog id="entry-dialog"><form id="entry-form"><button type="button" class="dialog-close" data-close="entry-dialog" aria-label="Close">×</button><span class="eyebrow" id="entry-kicker">TAKE YOUR PLACE</span><h2 id="entry-title">MAKE IT<br><em>YOUR RACE.</em></h2><label for="driver-name">DRIVER NAME</label><input id="driver-name" name="name" maxlength="18" placeholder="Your street name" required autocomplete="nickname" /><div id="join-code-wrap" hidden><label for="join-code">ROOM CODE</label><input id="join-code" name="code" maxlength="8" placeholder="E.G. NIGHT" autocapitalize="characters" autocomplete="off" /></div><label>DRIVER ACCENT</label><div class="color-choices" id="color-choices"></div><div id="controller-choice" class="controller-choice"><input type="checkbox" id="phone-mode" /><label for="phone-mode">Use this device as a phone controller</label></div><p id="entry-error" class="form-error" role="alert"></p><button id="entry-submit" type="submit" class="button primary">CREATE ROOM <span>↗</span></button><p class="form-note">No sign-up. Native car liveries are assigned by the engine.</p></form></dialog>
+
+  <dialog id="info-dialog"><button class="dialog-close" data-close="info-dialog" aria-label="Close">×</button><span class="eyebrow">REAL GAME. CLEAR SIGNAL.</span><h2>HOW WE<br><em>RACE.</em></h2><div class="instruction"><b>01</b><div><h3>One room. Same race.</h3><p>Create a room on the projector. Friends scan its QR code and join from their phones. Two drivers must be ready to start.</p></div></div><div class="instruction"><b>02</b><div><h3>Phones steer. Big screen drives.</h3><p>Hold GAS and steer with the arrow buttons. A computer driver can use WASD or arrow keys. Every driver has a native camera view on the shared screen.</p></div></div><div class="instruction"><b>03</b><div><h3>Earn the finish.</h3><p>Follow the route through its checkpoints. The native Matrix engine decides positions, collisions and results.</p></div></div><div class="honesty-note"><span class="status-dot"></span><div><b>Actual Matrix engine gameplay</b><p>The race displays camera frames from the native Matrix racing engine. The landing car is illustrative. City chapter names describe authored stories, not accurate geographic maps. ComfyUI story generation and generated visuals are not connected yet. A 4K display canvas does not increase native source-frame detail.</p></div></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div><div id="fatal" class="fatal" hidden></div>
+  <script type="module" src="/src/client.js"></script>
+</body>
+</html>

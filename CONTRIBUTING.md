@@ -1,6 +1,6 @@
 # Contributing to Comfy Race
 
-Comfy Race is documentation-first. Start with [the roadmap](docs/ROADMAP.md) and [the build epic](docs/BUILD_PLAN.md). Architecture and application implementation follow this repository foundation.
+Comfy Race integrates the actual Matrix native engine with a multiplayer gateway and UI. Start with [the roadmap](docs/ROADMAP.md) and [the build tracker](docs/BUILD_PLAN.md). Keep code delivery separate from hardware/gameplay acceptance.
 
 ## First implementation milestones
 
@@ -8,7 +8,7 @@ Comfy Race is documentation-first. Start with [the roadmap](docs/ROADMAP.md) and
 2. Build the native racer and the separate race-server target.
 3. Prove two human input sources operate separate cars in one simulation.
 4. Add controller-only phones and a readable shared projector output.
-5. Add clean clip capture and a real, bounded Comfy workflow integration.
+5. Add validated story workflows and an independently measured live Comfy rendering path.
 
 Do not treat AI opponents, isolated time trials, mock jobs, or upstream demo footage as proof of completed Comfy Race functionality.
 

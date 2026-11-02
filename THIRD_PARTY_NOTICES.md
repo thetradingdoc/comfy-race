@@ -1,5 +1,11 @@
 # Third-party notices and attribution
 
+## Multiplayer app dependencies
+
+The web app uses Three.js (MIT), ws (MIT), qrcode (MIT) and Vite (MIT, build tooling). Exact versions and transitive dependencies are recorded in game/package-lock.json; retain package license notices when redistributing dependencies or bundles. The landing showcase is original procedural artwork, not a screenshot of native or generated gameplay.
+
+Native Matrix patches and the racing asset downloader reference the official v4 source/release. Downloaded audio retains its upstream audio/CREDITS.md attribution.
+
 The root Apache-2.0 license applies to original Comfy Race contributions. It does not relicense the materials below.
 
 ## Matrix-Game 4.0
