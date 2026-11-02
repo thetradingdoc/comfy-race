@@ -17,8 +17,8 @@ from urllib.request import Request, urlopen
 
 MAX_BODY = 1_500_000
 STATIC_ROOT = Path(__file__).resolve().parent / "static"
-ROUTES = {"/": "index.html", "/play": "index.html", "/race": "index.html", "/race-complete": "index.html", "/operator": "index.html", "/app.js": "app.js", "/style.css": "style.css", "/hero.svg": "hero.svg"}
-MIMES = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css", "hero.svg": "image/svg+xml"}
+ROUTES = {"/": "index.html", "/play": "index.html", "/race": "index.html", "/race-complete": "index.html", "/operator": "index.html", "/app.js": "app.js", "/game.js": "game.js", "/style.css": "style.css", "/hero.svg": "hero.svg"}
+MIMES = {"index.html": "text/html", "app.js": "text/javascript", "game.js": "text/javascript", "style.css": "text/css", "hero.svg": "image/svg+xml"}
 
 
 def validate_gpu_url(value: str) -> str:
