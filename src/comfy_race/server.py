@@ -6,10 +6,8 @@ No GPU required to boot the UI. Connection requires a real ComfyStream GPU backe
 from __future__ import annotations
 
 import argparse
-from functools import partial
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
-import mimetypes
 import os
 from pathlib import Path
 import sys
@@ -19,8 +17,8 @@ from urllib.request import Request, urlopen
 
 MAX_BODY = 1_500_000
 STATIC_ROOT = Path(__file__).resolve().parent / "static"
-ROUTES = {"/": "index.html", "/app.js": "app.js", "/style.css": "style.css"}
-MIMES = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css"}
+ROUTES = {"/": "index.html", "/play": "index.html", "/race": "index.html", "/race-complete": "index.html", "/operator": "index.html", "/app.js": "app.js", "/style.css": "style.css", "/hero.svg": "hero.svg"}
+MIMES = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css", "hero.svg": "image/svg+xml"}
 
 
 def validate_gpu_url(value: str) -> str:
@@ -82,6 +80,12 @@ class Handler(BaseHTTPRequestHandler):
         self._response(status, json.dumps(value, separators=(",", ":")).encode(), "application/json; charset=utf-8")
 
     def do_GET(self) -> None:
+        if self.path == "/api/workflow":
+            try:
+                payload = (STATIC_ROOT / "workflow.json").read_bytes()
+            except OSError:
+                return self._json(503, {"error": "Bundled racing workflow unavailable"})
+            return self._response(200, payload, "application/json; charset=utf-8")
         if self.path == "/api/status":
             return self._json(200, {"configured": bool(self.gpu_url), "gpu_tested": False,
                                     "message": "GPU URL configured" if self.gpu_url else "Start server with --gpu-url"})
