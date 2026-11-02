@@ -11,15 +11,28 @@ Updated 2026-11-02. **No E01–E16 acceptance gate is fully verified.** Committe
 | E05 | SD1.5/TensorRT/depth compatible model stack | `workflows/comfy-race-sd15-depth-api.json`; `scripts/workflow_asset_report.py` | **Partial:** no installed engines/checkpoints |
 | E06 | OBS captures clean game window | Steps in `docs/GETTING_STARTED.md` | **Blocked:** Mac + OBS |
 | E07 | ComfyStream returns stylized moving race frames | Candidate API graph and steps | **Blocked:** full live integration |
-| E08 | 16:9 game view → 512-square workflow without unacceptable loss | `scripts/frame_geometry.py` computes contain/cover geometry; unit-tested | **Partial:** actual video adapter not implemented |
+| E08 | 16:9 game view → 512-square workflow without unacceptable loss | `scripts/frame_geometry.py` plus **real browser canvas letterboxing** in `src/comfy_race/static/app.js` | **Software done; acceptance blocked:** evaluate actual roads/car on live AI feed |
 | E09 | One visually coherent tested style | Fixed text prompt in candidate workflow | **Partial:** no image/video quality proof |
-| E10 | Measured presented FPS, p50/p95 input-to-photon, stalls | `scripts/measure_session.py` summarizes user-supplied timestamp CSV; unit-tested | **Partial:** no instrumentation or measured session |
+| E10 | Measured presented FPS, p50/p95 input-to-photon, stalls | **Implemented** browser presented-frame health sampling + export; `scripts/measure_session.py` computes percentiles from real timing CSV | **Partial:** real correlated input/output events and GPU timings absent |
 | E11 | Finish full course watching only AI imagery | — | **Blocked:** E02–E10 |
-| E12 | Diagnostic source/AI views and loss-of-AI state | — | **Not implemented** |
+| E12 | Diagnostic source/AI views and loss-of-AI state | **Implemented** browser source diagnostic pane, separate AI-only primary stage, connection/freeze/error states and exportable client stats; HTTP signaling proxy | **Code delivered; real stream failure behavior not hardware-verified** |
 | E13 | Venue screen/audio/network rehearsal | — | **Blocked:** venue and running app |
 | E14 | Actual reproducible source/model/workflow/license setup | Repo, workflow, static tests and docs | **Partial:** no reproducible GPU install |
 | E15 | Authentic under-two-minute gameplay video | — | **Blocked:** working demo |
 | E16 | Verify rules + submit | Published public repository only | **Blocked:** eligible tested entry and submission |
+
+## Operator application committed
+
+```bash
+python3 -m pip install -e .
+comfy-race-operator --port 8090
+# Configure a controlled GPU server once E02 passes:
+comfy-race-operator --port 8090 --gpu-url http://GPU_HOST:8889
+```
+
+Open http://127.0.0.1:8090 and follow [operator documentation](OPERATOR_CONSOLE.md). The app is a local operator console, NOT an AI renderer by itself. OBS capture and live GPU AI remain essential.
+
+**CI warning:** GitHub Actions workflow runs were reported as failures while building. No green CI status was verified. Tests are written and committed; actual successful execution of the current repository suite remains to be confirmed.
 
 ## Commands that can be run now
 
