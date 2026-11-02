@@ -19,4 +19,4 @@ comfy-race-operator = "comfy_race.server:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-comfy_race = ["static/*.html", "static/*.js", "static/*.css"]
+comfy_race = ["static/*.html", "static/*.js", "static/*.css", "static/*.svg", "static/*.json"]
