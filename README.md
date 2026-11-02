@@ -6,6 +6,20 @@
 
 [Live system design and build epic](docs/BUILD_PLAN.md) · [Roadmap](docs/ROADMAP.md) · [Setup](docs/GETTING_STARTED.md) · [Source notes](docs/SOURCES.md) · [License](LICENSE)
 
+## First committed implementation
+
+The repo now includes a **candidate live ComfyUI workflow** and executable preflight/check tooling; this is not a running racing integration. Start with [implementation status](docs/IMPLEMENTATION_STATUS.md).
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/check_workflow.py workflows/comfy-race-sd15-depth-api.json
+python3 scripts/preflight.py --mode mac
+# On an actual configurable NVIDIA machine:
+python3 scripts/preflight.py --mode gpu --workspace /path/to/ComfyUI
+```
+
+The candidate workflow comes from ComfyStream's SD1.5 TensorRT/depth example and requires separate checkpoint, engine and compatible node installation. No FPS or playability has been verified.
+
 ## Player journey
 
 1. Host starts Matrix-Game City Racing on a Mac, on a supported existing course.
