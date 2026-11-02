@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfy-race-operator"
+version = "0.1.0"
+description = "Local-only operator UI and signaling bridge for live ComfyUI racing"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{name = "Comfy Race contributors"}]
+dependencies = []
+
+[project.scripts]
+comfy-race-operator = "comfy_race.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+comfy_race = ["static/*.html", "static/*.js", "static/*.css"]
