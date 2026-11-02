@@ -103,6 +103,14 @@ The older `Yuan-ManX/ComfyUI-Matrix-Game` node code runs a video-generation loop
 
 The demo page's embedded videos did not play in the research browser. We have not visually validated handling, motion quality, audio quality, or responsiveness from those clips. Review them manually or through working playback before making aesthetic claims. [Demo page](https://matrix-game-v4-0.github.io/page/)
 
+### Visual reference for the planned racing foundation
+
+[![Official Matrix-Game 4.0 City Racing research comparison; not Comfy Race gameplay](https://raw.githubusercontent.com/matrix-game-v4-0/page/6642fe456208814c7d0ae4f7b25d4daa94c60a3a/assets/gallery/racing_03.jpg)](https://matrix-game-v4-0.github.io/page/assets/gallery/racing_03.mp4)
+
+[Watch the official comparison](https://matrix-game-v4-0.github.io/page/assets/gallery/racing_03.mp4) · [Watch a longer racing demonstration](https://matrix-game-v4-0.github.io/page/assets/long/long_racing.mp4) · [Media provenance and additional source images](SOURCES.md#official-research-media).
+
+Credit: Skywork AI / Matrix-Game Team, [official project page](https://matrix-game-v4-0.github.io/page/). This is remotely referenced upstream research media, not our implementation or a performance benchmark. Media rights remain with the original owners.
+
 ## 4. Local readiness and what to configure before arrival
 
 The first implementation needs the following prerequisites. These are project requirements, not claims that a contributor's machine has been configured or a build has passed.
