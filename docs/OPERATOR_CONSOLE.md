@@ -1,4 +1,4 @@
-# E06–E12: live operator console — local-first
+# E06–E12: Comfy Race game UI and host operator — local-first
 
 This is **real application code**, not a mock-up. It is runnable on any machine with Python 3.10+ and a browser. It cannot render AI frames without a running compatible GPU-hosted ComfyStream instance.
 
@@ -10,7 +10,7 @@ From the repository root:
 PYTHONPATH=src python3 -m comfy_race.server --port 8090
 ```
 
-Open `http://127.0.0.1:8090`. This serves a local diagnostics UI and explicitly reports that the GPU is not configured. No credentials or GPU needed for static UI diagnostics.
+Open `http://127.0.0.1:8090` for the game landing page. Select **Play Race** for preflight or **Host setup** for the operator controls. `/race` contains the live output viewport; `/race-complete` deliberately shows no invented results until native engine telemetry exists. This also serves a local diagnostics UI and explicitly reports that the GPU is not configured. No credentials or GPU needed for static UI diagnostics.
 
 For a real GPU backend accessible from the Mac:
 
@@ -25,8 +25,8 @@ Only configure an address you control. The gateway binds on loopback, validates 
 1. Build and start the native City Racing game with `--no-hud` on Mac.
 2. In OBS create **Window Capture** of the game. Start **OBS Virtual Camera**.
 3. In the local browser console select the device explicitly named **OBS Virtual Camera**. A personal webcam is refused.
-4. Select `workflows/comfy-race-sd15-depth-api.json` in the workflow file picker.
-5. Click **Start live AI**. The console letterboxes the game feed into a 512×512 canvas (never stretches/crops road edges), captures at a requested 24 FPS, forwards a WebRTC offer and displays returned processed video.
+4. The workflow is preloaded from the bundled `workflows/comfy-race-sd15-depth-api.json`; upload another API-format workflow only when necessary.
+5. In **Host setup**, click **Start live AI**. Open `/race` to view the returned video full-width. The console letterboxes the game feed into a 512×512 canvas (never stretches/crops road edges), captures at a requested 24 FPS, forwards a WebRTC offer and displays returned processed video.
 6. **Only the right/primary view counts as AI output.** The source diagnostic canvas remains clearly labeled; on loss of processed frames the primary view is explicitly covered by a failure state.
 7. Export diagnostic JSON for observed frame statistics. This does not equal G3 input-to-photon latency; use measurement traces in `scripts/measure_session.py`.
 
