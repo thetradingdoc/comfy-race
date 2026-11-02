@@ -1,0 +1,13 @@
+Comfy Race
+Copyright 2026 Comfy Race contributors
+
+Original contributions in this repository are provided under the Apache License,
+Version 2.0. This notice does not grant rights to third-party media, model weights,
+software, datasets, audio, trademarks, or other separately licensed materials.
+
+The project acknowledges Skywork AI and the Matrix-Game Team. Their software and
+research demonstrations are upstream work, not original Comfy Race contributions.
+The documentation release references upstream materials remotely and does not
+vendor the Matrix-Game engine, neural models, or research media.
+
+See THIRD_PARTY_NOTICES.md and docs/SOURCES.md for provenance and scope.
