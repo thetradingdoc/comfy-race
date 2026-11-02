@@ -1,106 +1,49 @@
-# Comfy Race
+# Comfy Race — live ComfyUI-rendered racing game
 
-**Race the room. Direct your own racing movie.**
+**Drive the real game. Watch ComfyUI redraw its world live.**
 
-An open-source hackathon project combining phone-controlled multiplayer racing with asynchronous cinematic replays made through Comfy workflows.
+**Status (November 2, 2026): documentation-first, not yet an implemented or performance-verified game.** V1 uses native C++ racing simulation as a source of low-poly frames, and ComfyStream with a genuine ComfyUI image-to-image workflow to generate the projected AI gameplay visuals. **No replay generation. No Matrix-Game 5B neural renderer in V1.**
 
-**Status: documentation-first.** This repository currently contains the project brief, build epic, source audit, and contribution/licensing documents. The game, multiplayer gateway, and Comfy workflows are planned and have not been implemented or benchmarked here.
+[Live system design and build epic](docs/BUILD_PLAN.md) · [Roadmap](docs/ROADMAP.md) · [Setup](docs/GETTING_STARTED.md) · [Source notes](docs/SOURCES.md) · [License](LICENSE)
 
-[Build epic and task tracker](docs/BUILD_PLAN.md) · [Initial account/key setup](docs/GETTING_STARTED.md) · [Roadmap](docs/ROADMAP.md) · [Source media and citations](docs/SOURCES.md) · [Contributing](CONTRIBUTING.md)
+## Player journey
 
-## The experience we want to build
+1. Host starts Matrix-Game City Racing on a Mac, on a supported existing course.
+2. One driver uses keyboard first; phone controller after the AI game passes performance tests.
+3. OBS captures the **game window**, sends it through OBS Virtual Camera (**not a human webcam**).
+4. ComfyStream sends those frames to an NVIDIA GPU; a **real ComfyUI workflow** performs image-to-image stylization on incoming video.
+5. Returned WebRTC stream appears on the Mac/projector while the driver is steering.
+6. Display source/processed images and measure action-to-photon latency; do not present reference output as AI generation.
 
-1. **Scan to join.** Open a QR link on your phone, enter a nickname, and choose your driver colour and number.
-2. **Race together.** Use your phone as a controller while the projector shows each active driver's view. Start with two human racers, then validate up to five per heat.
-3. **Pick your moment.** Select a finish, overtake, or short segment from the actual race recording.
-4. **Direct your film.** Choose a city-inspired visual treatment and a supported camera/edit preset.
-5. **Create with Comfy.** Submit the clean recording to a tested video-conditioning workflow, then compare the source with the cinematic result and export it.
-
-The race supplies the action. Comfy turns a player's own performance into something they can make and share.
-
-## Inspiration: Matrix-Game 4.0 City Racing
-
-**The media below belongs to the upstream Matrix-Game research project. It is not Comfy Race gameplay or evidence of an implemented feature in this repository.**
-
-[![Upstream Matrix-Game 4.0 City Racing comparison: generated and low-poly imagery; not Comfy Race gameplay](https://raw.githubusercontent.com/matrix-game-v4-0/page/6642fe456208814c7d0ae4f7b25d4daa94c60a3a/assets/gallery/racing_03.jpg)](https://matrix-game-v4-0.github.io/page/assets/gallery/racing_03.mp4)
-
-[Watch the official racing comparison](https://matrix-game-v4-0.github.io/page/assets/gallery/racing_03.mp4) · [Watch the longer racing demonstration](https://matrix-game-v4-0.github.io/page/assets/long/long_racing.mp4) · [Explore the interactive project page](https://matrix-game-v4-0.github.io/page/)
-
-Source and credit: **Skywork AI / Matrix-Game Team**, [Matrix-Game 4.0](https://matrix-game-v4-0.github.io/page/). Images are referenced remotely; upstream media retains its original rights. See [media provenance](docs/SOURCES.md).
-
-## Our approach: the Asynchronous Director
+## Live architecture
 
 ```mermaid
-flowchart LR
-    A[Native racing simulation] --> B[Clean race clip and telemetry]
-    B --> C[Application gateway and job queue]
-    C --> D[Comfy video-conditioning workflow]
-    E[City-inspired style and edit preset] --> D
-    D --> F[Validated cinematic film]
-    B --> G[Authoritative race results]
-    G --> F
+flowchart TD
+  A[Driver input] --> B[Mac C++ City Racing simulation: physics + virtual chase camera]
+  B --> C[OpenGL low-poly game window --no-hud]
+  C --> D[OBS Window Capture and Virtual Camera]
+  D --> E[ComfyStream WebRTC uplink to NVIDIA GPU]
+  E --> F[ComfyUI img2img: SD1.5 / TensorRT + depth conditioning]
+  F --> G[ComfyStream WebRTC output]
+  G --> H[Live projector: AI-stylized road, car and environment]
 ```
 
-This is the **planned design**, not an implemented deployment. Native gameplay owns physics, checkpoints, collisions, and results. Media generation runs after a selected segment is captured; it cannot block steering or decide who won.
+**ComfyUI is the AI visual renderer**, not the physics engine. ComfyStream transports video and runs the graph. Upstream native Matrix-Game's specialized 5B neural renderer is not part of this implementation. The **in-game chase camera is virtual geometry**; OBS Virtual Camera is just a software video device for streaming the game. No player-facing camera.
 
-- **Phones are controllers:** touch inputs, HUD, and lightweight telemetry/minimap. No individual video stream is required on each phone.
-- **The projector is the shared game display:** every active driver needs a usable view. A composite can reduce encoding/network overhead, while still requiring multiple camera renders.
-- **Clean recording comes from the renderer's existing scene layer:** keep names, scores, and HUD outside the model input. Packed clean/HUD frames are a fallback to benchmark.
-- **Generation is queued:** one host-selected job at a time initially, with cached fallbacks, explicit credit limits, and recoverable job IDs.
-- **A short clip is not a latency claim:** first benchmark 3–5 seconds of source footage, then attempt up to 10 seconds.
+## Reality check
 
-Candidate models include MiniMax H3 or LTX workflows. We must verify the exact template/backend supports the required video conditioning; an image-to-video workflow alone does not preserve a complete race trace. [H3 workflow documentation](https://docs.comfy.org/tutorials/video/minimax/minimax-h3), [LTX documentation](https://docs.comfy.org/tutorials/video/ltx/ltx-2-5).
+This integration is planned, not yet playable or benchmarked. G3 requires completing a course looking **only** at the generated view while measuring presented AI FPS, input-to-screen latency, frame drops and visual geometry. Proposed targets (not observed): >=12 presented AI FPS, p95 <=450ms, no repeated >1s freezes. If it fails, we cannot claim a real-time ComfyUI game.
 
-## Creative direction: a world tour
+**Scope:** one driver, one supported course, one stable theme. No multiplayer, new world geometry, crowd-controlled weather, or post-race films in V1. See [BUILD_PLAN.md](docs/BUILD_PLAN.md) for 28 tasks and honest stop/go gates.
 
-| City-inspired preset | Intended visual direction | Scope |
-|---|---|---|
-| New York | Dusk, steel and glass, yellow accents | First presentation/replay target |
-| Tokyo | Neon, rain and reflected light | Candidate second treatment |
-| Nairobi | Warm dusk, contemporary skyline, greenery and original urban graphics | Planned creative preset |
-| London | Brick and stone, overcast skies, wet-road atmosphere | Planned creative preset |
-| Moscow, Russia | Winter dusk and snow on scenery | Planned creative preset |
+## Compute
 
-These are creative treatments, **not five geographically accurate playable maps**. New roads, collision geometry, traffic paths, or snow traction require engine/level work. A generated film may reinterpret appearance; the real race results remain unchanged.
+Needs an actual configurable NVIDIA Linux host with CUDA, compatible nodes/models and WebRTC media connectivity. **Comfy credits do not automatically provide such a GPU.** Colab is an experimental fallback only. Original game/asset licenses and model rights remain applicable.
 
-## What exists and what comes next
+## References
 
-| Area | Current state | Next proof |
-|---|---|---|
-| Brief, epic and source citations | Written | Keep decisions and evidence current |
-| Native game foundation | Upstream source reviewed | Pinned build and one local completed race |
-| Human multiplayer | Useful upstream simulation/session code identified | Two humans control separate cars in one world |
-| Phone controls/projector | Planned | Two controller phones and readable split-screen |
-| Five-player heats | Target, not verified | Full heat, reset, disconnect and readability tests |
-| Comfy API integration | Planned | One actual app-triggered job with stored output |
-| Race Director | Planned | Actual race clip → tested workflow → source/result comparison |
-| Comfy Race gameplay video | Not recorded yet | Publish our own recording after the first working build |
+- [Matrix-Game City Racing](https://github.com/SkyworkAI/Matrix-Game/blob/main/Matrix-Game-4/docs/racing.md)
+- [ComfyStream](https://github.com/livepeer/comfystream)
+- [ComfyStream candidate SD1.5 TensorRT graph](https://github.com/livepeer/comfystream/blob/main/workflows/comfystream/sd15-tensorrt-api.json)
 
-The inspected upstream code contains five player slots and race-session logic. Its separate multiplayer server is not wired into the standard build/browser path. Desktop `--players 5` includes AI opponents and is not proof of five-human play. See the [source audit and acceptance gates](docs/BUILD_PLAN.md#3-code-audit-reusable-foundation-and-actual-gaps).
-
-## Get started today
-
-This is currently a documentation checkout; there is no application install or launch command yet.
-
-```bash
-git clone https://github.com/thetradingdoc/comfy-race.git
-cd comfy-race
-```
-
-Read [ROADMAP.md](docs/ROADMAP.md) for the immediate milestones and [BUILD_PLAN.md](docs/BUILD_PLAN.md) for task dependencies, credits, setup prerequisites, tests, and event operations. Runnable setup instructions will be added with the first verified implementation.
-
-Prepare the Comfy account and ignored local key file using [GETTING_STARTED.md](docs/GETTING_STARTED.md) and [.env.example](.env.example). Do not paste API keys into chat or commit them.
-
-Development of the documentation, controllers, contracts, and mocks does not require Comfy credits. Real hosted generation requires the relevant account/API access and compute or credits. Native gameplay does not require downloading Matrix's neural weights. The plan separates those costs and dependencies.
-
-## Hackathon goal and original contribution
-
-Prepared for the [Open Source Higgsfield competition / Comfy Build Night](https://comfy.org/open-source-higgsfield). Our intended contribution is the event game experience and reusable Race Director: shared phone controllers, projector composition, clean capture, source-linked media generation, and a reproducible workflow-driven app.
-
-The competition requires open-source app code, a license, and setup instructions. Partner models are permitted generally; the Open Weights Only category has additional restrictions. Category fit, submission timing, and provider-bonus eligibility still need organizer confirmation. This repository is project preparation, not a submitted or completed entry.
-
-## Attribution and license
-
-Comfy Race builds on research and software by **Skywork AI / the Matrix-Game Team**. We do not claim authorship of their engine, model, or demonstrations. The planned integration starts from [Matrix-Game v4 revision `51913b2`](https://github.com/SkyworkAI/Matrix-Game/tree/51913b2bfa78a6d54de912b8348b1d318f4d36e2/Matrix-Game-4); upstream source is not vendored in this documentation release.
-
-Original Comfy Race contributions are licensed under [Apache-2.0](LICENSE). Upstream software, models, audio, images, videos, and trademarks retain their respective terms. See [NOTICE](NOTICE), [third-party notices](THIRD_PARTY_NOTICES.md), and [source citations](docs/SOURCES.md).
+Original Comfy Race contributions are licensed under [Apache-2.0](LICENSE). Attribution and third-party terms: [NOTICE](NOTICE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
