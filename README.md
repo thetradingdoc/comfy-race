@@ -31,6 +31,27 @@ python3 scripts/workflow_asset_report.py workflows/comfy-race-sd15-depth-api.jso
 python3 scripts/frame_geometry.py --width 1280 --height 720
 ```
 
+## Run the new operator application (CPU-only)
+
+The repository now includes a **working-code implementation** of the local operator console (`src/comfy_race`): video source selection, safe letterboxing, local signaling gateway using ComfyStream's `/offer` API, return-stream display, explicit disconnected/stale statuses, and a diagnostic export. No GPU is necessary to launch the UI, but **a real GPU-backed ComfyStream server is necessary to process images**.
+
+```bash
+python3 -m pip install -e .
+comfy-race-operator --port 8090
+# Once you have the GPU host:
+comfy-race-operator --port 8090 --gpu-url http://GPU_HOST:8889
+```
+
+Open `http://127.0.0.1:8090`. See [operator documentation](docs/OPERATOR_CONSOLE.md) and [Phase 0 task status](docs/IMPLEMENTATION_STATUS.md).
+
+To check the CPU-side code:
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/check_workflow.py workflows/comfy-race-sd15-depth-api.json
+```
+
+**Do not claim this is a completed or GPU-validated game.** No live AI rendering session, native Mac game build or G3 playability result has been produced yet.
+
 ## Player journey
 
 1. Host starts Matrix-Game City Racing on a Mac, on a supported existing course.
