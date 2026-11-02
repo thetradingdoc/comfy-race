@@ -20,6 +20,17 @@ python3 scripts/preflight.py --mode gpu --workspace /path/to/ComfyUI
 
 The candidate workflow comes from ComfyStream's SD1.5 TensorRT/depth example and requires separate checkpoint, engine and compatible node installation. No FPS or playability has been verified.
 
+### Phase 0 implementation (E01–E16)
+
+See the [exact acceptance table](docs/IMPLEMENTATION_STATUS.md). **All P0 game and GPU gates remain unverified**, but the repository now contains pinned upstream checkout scripts, a model/engine inventory, video fit/crop geometry calculation, timing-report tooling, and unit tests.
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/check_workflow.py workflows/comfy-race-sd15-depth-api.json
+python3 scripts/workflow_asset_report.py workflows/comfy-race-sd15-depth-api.json
+python3 scripts/frame_geometry.py --width 1280 --height 720
+```
+
 ## Player journey
 
 1. Host starts Matrix-Game City Racing on a Mac, on a supported existing course.
