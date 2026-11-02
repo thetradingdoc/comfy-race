@@ -76,6 +76,22 @@ class HttpTests(unittest.TestCase):
                 self.assertIn(expected, content)
                 self.assertIn("no-store", headers["Cache-Control"])
 
+    def test_game_routes_and_asset(self):
+        for route, expected in (("/", b"PLAY RACE"), ("/play", b"READY TO RACE"),
+                                ("/race", b"race-stage"), ("/race-complete", b"RACE VERIFICATION"),
+                                ("/operator", b"Source"), ("/game.js", b"showPage"),
+                                ("/hero.svg", b"<svg")):
+            with self.subTest(route=route):
+                status, body, _ = self.request("GET", route)
+                self.assertEqual(status, 200)
+                self.assertIn(expected, body)
+
+    def test_workflow_is_bundled(self):
+        status, body, headers = self.request("GET", "/api/workflow")
+        self.assertEqual(status, 200)
+        self.assertIn(b"TensorRTLoader", body)
+        self.assertIn("application/json", headers["Content-Type"])
+
     def test_no_gpu_cannot_start(self):
         status, content, _ = self.request("POST", "/api/offer", body=b"{}")
         self.assertEqual(status, 503)
