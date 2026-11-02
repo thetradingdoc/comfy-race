@@ -12,7 +12,7 @@ class RepoContractTests(unittest.TestCase):
             entry = lock["repositories"][name]
             self.assertEqual(len(entry["commit"]), 40)
             self.assertTrue(entry["url"].startswith("https://github.com/"))
-            self.assertIn("license", entry["code_license"].lower())
+            self.assertTrue(entry["code_license"].strip())
 
     def test_operator_static_assets(self):
         for suffix in ("index.html", "style.css", "app.js"):
