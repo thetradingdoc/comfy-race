@@ -6,7 +6,7 @@ An open-source hackathon project combining phone-controlled multiplayer racing w
 
 **Status: documentation-first.** This repository currently contains the project brief, build epic, source audit, and contribution/licensing documents. The game, multiplayer gateway, and Comfy workflows are planned and have not been implemented or benchmarked here.
 
-[Build epic and task tracker](docs/BUILD_PLAN.md) · [Roadmap](docs/ROADMAP.md) · [Source media and citations](docs/SOURCES.md) · [Contributing](CONTRIBUTING.md)
+[Build epic and task tracker](docs/BUILD_PLAN.md) · [Initial account/key setup](docs/GETTING_STARTED.md) · [Roadmap](docs/ROADMAP.md) · [Source media and citations](docs/SOURCES.md) · [Contributing](CONTRIBUTING.md)
 
 ## The experience we want to build
 
@@ -88,6 +88,8 @@ cd comfy-race
 ```
 
 Read [ROADMAP.md](docs/ROADMAP.md) for the immediate milestones and [BUILD_PLAN.md](docs/BUILD_PLAN.md) for task dependencies, credits, setup prerequisites, tests, and event operations. Runnable setup instructions will be added with the first verified implementation.
+
+Prepare the Comfy account and ignored local key file using [GETTING_STARTED.md](docs/GETTING_STARTED.md) and [.env.example](.env.example). Do not paste API keys into chat or commit them.
 
 Development of the documentation, controllers, contracts, and mocks does not require Comfy credits. Real hosted generation requires the relevant account/API access and compute or credits. Native gameplay does not require downloading Matrix's neural weights. The plan separates those costs and dependencies.
 
