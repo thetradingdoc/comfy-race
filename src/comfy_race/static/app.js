@@ -52,7 +52,7 @@ async function listCameras(){
  }catch(e){setStatus("Camera discovery blocked: "+e.message);}
  canStart();
 }
-function canStart(){ $("start").disabled=!(state.workflow&&$("camera").value)&&!state.pc; }
+function canStart(){ $("start").disabled=!!state.pc||!(state.workflow&&$("camera").value); }
 $("refresh").addEventListener("click",listCameras);
 $("camera").addEventListener("change",canStart);
 $("workflow").addEventListener("change",async e=>{
@@ -116,4 +116,14 @@ $("export").addEventListener("click",()=>{
  const url=URL.createObjectURL(new Blob([JSON.stringify(info,null,2)],{type:"application/json"}));
  const a=document.createElement("a");a.href=url;a.download="comfy-race-client-diagnostics.json";a.click();URL.revokeObjectURL(url);
 });
-(async()=>{try{const r=await (await fetch("/api/status")).json();setStatus(r.message);}catch{setStatus("Local server unavailable");}if(navigator.mediaDevices)listCameras();else setStatus("MediaDevices unavailable; open via localhost/HTTPS");})();
+(async()=>{
+ try{
+  const response=await fetch("/api/workflow");
+  if(!response.ok)throw Error("Bundled workflow unavailable");
+  state.workflow=validWorkflow(await response.json());
+  $("workflow-state").textContent="Default Comfy Race workflow loaded. Replace only if needed.";
+ }catch(error){$("workflow-state").textContent="Workflow failed to load: "+error.message;}
+ try{const r=await (await fetch("/api/status")).json();setStatus(r.message);}catch{setStatus("Local server unavailable");}
+ if(navigator.mediaDevices)await listCameras();else setStatus("MediaDevices unavailable; open via localhost/HTTPS");
+ canStart();
+})();
