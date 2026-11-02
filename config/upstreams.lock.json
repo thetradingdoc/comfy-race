@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "inspected_date": "2026-11-02",
+  "architecture": "B: native Matrix City Racing C++ pixels -> ComfyStream -> ComfyUI SD1.5/TensorRT",
+  "repositories": {
+    "matrix_game": {
+      "url": "https://github.com/SkyworkAI/Matrix-Game.git",
+      "commit": "51913b2bfa78a6d54de912b8348b1d318f4d36e2",
+      "component": "Matrix-Game-4 City Racing source only; no 5B neural renderer",
+      "code_license": "Apache-2.0 (Matrix-Game-4/LICENSE); repository root LICENSE applies to older modules and is different",
+      "external_assets": "Skywork/Matrix-Game-4.0 model-repository racing game assets, pinned revision 2c53100457da7abcf0e966f75637c644d3423a63",
+      "asset_license_note": "See v4 releases/game-assets.json; audio includes CC0 and CC BY 3.0; must retain attribution"
+    },
+    "comfystream": {
+      "url": "https://github.com/livepeer/comfystream.git",
+      "commit": "4e9dace24b194be639db91ac983258f78eb6aafd",
+      "component": "ComfyUI live video media/inference processing",
+      "code_license": "MIT",
+      "workflow_path": "workflows/comfystream/sd15-tensorrt-api.json",
+      "workflow_blob": "9c338aa88f6430c8b6bfe2b8d035cb5ca347e464"
+    }
+  },
+  "licenses_unverified": [
+    "SD1.5 DreamShaper/TensorRT derivative redistribution and usage",
+    "Depth Anything model and converted TensorRT engine",
+    "SD1.5 depth ControlNet checkpoint",
+    "CLIP weights",
+    "TAESD weights",
+    "actual downloaded racing assets and audio attribution"
+  ],
+  "status": "source references pinned; full downstream model/asset licensing remains to be audited before release"
+}
