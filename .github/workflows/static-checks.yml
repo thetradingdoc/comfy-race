@@ -1,0 +1,29 @@
+name: Static workflow checks
+
+on:
+  push:
+    paths:
+      - "scripts/**"
+      - "tests/**"
+      - "workflows/**"
+      - ".github/workflows/static-checks.yml"
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "tests/**"
+      - "workflows/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python
+        run: python -m compileall -q scripts tests
+      - name: Test validator
+        run: python -m unittest discover -s tests -v
+      - name: Audit live workflow API graph
+        run: python scripts/check_workflow.py workflows/comfy-race-sd15-depth-api.json
