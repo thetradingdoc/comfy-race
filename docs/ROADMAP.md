@@ -1,76 +1,13 @@
-# Comfy Race roadmap
+# Comfy Race roadmap — live ComfyUI renderer
 
-This is an implementation sequence, not a list of completed features. The full [epic and tracker](BUILD_PLAN.md) defines task IDs, dependencies, costs, acceptance criteria and deferred work.
+This is a proposal, not a completed application. See [BUILD_PLAN.md](BUILD_PLAN.md) for detailed acceptance criteria and system design.
 
-## 0. Repository foundation
+1. **G0 — Native proof:** Mac build of CitySampleBBoxGame, one route driven, licensed assets and build log.
+2. **G1 — Comfy proof:** Deploy configurable NVIDIA GPU; run actual ComfyStream ComfyUI workflow on live video; verify its output changes frames.
+3. **G2 — Integration:** Run native game window -> OBS Virtual Camera -> ComfyStream -> ComfyUI -> WebRTC projector; no player camera.
+4. **G3 — Playability or stop:** Pilot a course entirely from AI output; measure presented FPS, p95 input-to-photo latency and stalls. A failed performance gate invalidates the planned live AI game demonstration.
+5. **G4 — Product quality:** One fixed visual style; playable game geometry; diagnostic reference; proper upstream attribution.
+6. **G5 — Optional controls:** Phone UI, authenticated WebSocket, safe latest-input handling in `MainSDL.cpp`, reconnect; only after G3.
+7. **G6 — Release:** Exact setup on one tested GPU, API-format workflow JSON, model/asset manifests, 2-minute authentic demo and submission.
 
-- [x] Name and product brief: Comfy Race.
-- [x] Documentation-first README with attributed upstream racing media.
-- [x] End-to-end epic and tracker.
-- [x] Apache-2.0 license for original contributions and separate third-party notices.
-- [x] Contribution guide and task/pull-request templates.
-- [x] Verify the public GitHub repository and introductory README.
-
-No architecture or application source code is included in this milestone.
-
-## 1. Prove the native game
-
-Tasks: A09–A12, B01–B07.
-
-- Pin the native source/assets and verify toolchain/license requirements.
-- Build the racer and add the separate race-server target.
-- Reuse rule tests and verify IPC lifecycle/input handling.
-- Prove two independent human inputs control distinct cars in one world.
-
-**Gate:** a real race completes and resets. Five AI cars do not count as human multiplayer.
-
-## 2. Make it playable in the room
-
-Tasks: B08–B11, C01–C11, D01–D03.
-
-- Guest QR lobby and controller-only phones.
-- Two-player split-screen, then a measured five-view projector composite.
-- Player colours/numbers, countdown, results and queue.
-- Documented contact/recovery/disconnect rules.
-- Responsive live audio, input release and usable sightlines.
-
-**Gate:** every claimed human player can steer from their displayed view; repeat heat/reset/interruption tests at that capacity.
-
-## 3. Capture a clean moment
-
-Tasks: D04–D06.
-
-- Reuse the renderer's existing clean scene layer.
-- Bounded selected-camera clip, frame identity and authoritative telemetry.
-- Begin with 3–5 seconds; attempt up to 10 only after measuring cost and fidelity.
-- Keep HUD, exact text and scores separate from model input.
-
-**Gate:** an actual source segment has correct duration, no burned-in HUD and traceable race provenance.
-
-## 4. Ship the Comfy Director workflow
-
-Tasks: E01–E12, E14, F01–F03.
-
-- Mock adapter first, then one real API job.
-- Persist request keys/job IDs and outputs; bound attempts/credits.
-- Verify exact full-video/reference/control conditioning on the chosen backend.
-- First NYC-inspired presentation, source/result comparison and export.
-- Preflight the actual workflow; dedicated warm-worker settings only within an approved budget.
-
-**Gate:** a real recorded input reaches a real workflow and produces a usable, honestly labeled output. A mock or unrelated cached video is not completion.
-
-## 5. Release and demonstrate
-
-Tasks: G01–G11, H01–H09.
-
-- Device/failure/capacity checks, licenses, reproducible setup and sample input.
-- Venue projector/audio/network rehearsal and a clearly labeled backup recording.
-- Show live play, selected source, a real Comfy job and the completed transformation.
-- Publish original contribution versus upstream reuse; submit through the official form.
-- Shut down compute and record any retained storage costs.
-
-**Gate:** another developer can reproduce the supported release and the demo claims match evidence.
-
-## Later scope
-
-Second city treatment; automatic moment detection; recorded alternate camera views; richer car selection; remote per-phone video; optional neural spectator rendering. Five geographic maps, per-player neural streaming, flight and battle royale remain separate expansion work.
+**Out of scope:** multiplayer, artificial replay, accurate new city levels, freely changing prompt/world, Matrix's native 5B neural renderer, and claim that API credits equal a persistent GPU.
