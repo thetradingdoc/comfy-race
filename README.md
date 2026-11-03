@@ -56,6 +56,8 @@ Current city chapters are **authored starter stories** tied to native checkpoint
 
 No credits or API keys are required for native racing. Later live rendering requires a running, compatible ComfyStream GPU endpoint; a browser trial or key alone does not supply this service.
 
+For Comfy Cloud workflow jobs, put COMFY_API_KEY and COMFY_BASE_URL in private .env.local. The launcher loads it automatically. Run python3 scripts/check_comfy_cloud.py for a read-only authentication check. See [Cloud key setup](docs/COMFY_CLOUD_SETUP.md); this is separate from the live renderer endpoint below.
+
 ~~~bash
 COMFY_RACE_GPU_URL=https://YOUR_COMFYSTREAM_ORIGIN bash scripts/run_game.sh
 ~~~

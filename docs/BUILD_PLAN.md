@@ -31,6 +31,7 @@ Code delivered, a passing unit test and successful human gameplay are different 
 | S03 | Story | Validate generated mission against native route catalog | Planned; reject impossible gates/actions and arbitrary code |
 | S04 | Story | Freeze approved mission/version across all racers | Planned; deterministic event interpretation required |
 | S05 | Story | Voice/cues/chapter progression during play | Planned |
+| C01 | Cloud setup | Private API key configuration and read-only authentication | Verified locally: GET /api/user returned HTTP 200; no generation submitted |
 | A01 | Live AI | Configure ComfyStream GPU/models/network | Waiting for configured service |
 | A02 | Live AI | Capture native canvas, signaling, returned video | Implemented; GPU unverified |
 | A03 | Live AI | Clean conditioning and two-view separation | Open test gate: native HUD, identity and road continuity |

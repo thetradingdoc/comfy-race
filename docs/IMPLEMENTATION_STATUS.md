@@ -9,6 +9,7 @@ Updated 2 November 2026. Actual Matrix engine, two-human gateway/UI, optional Co
 - Upstream native rules test: navigation, shared physics, independent controls, pause/reconnect/recovery.
 - Ten pure Node contract/session tests.
 - Vite production build and browser review of the landing interface.
+- Comfy Cloud authentication: private local credentials configured; GET /api/user returned HTTP 200. No workflow was submitted and no generation or entitlement claim follows from this check.
 
 ## Delivered, runtime acceptance pending
 

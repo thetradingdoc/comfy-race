@@ -40,4 +40,4 @@ printf 'Engine: actual native Matrix City Racing; two human phone controllers by
 printf 'Phones: use this Mac on the same Wi-Fi; the game shows its LAN join address and QR code.\n'
 printf 'Run in a normal Mac Terminal session so SDL can access the display.\n'
 printf 'ComfyUI and GPU credits are optional future integrations; this launch uses native game rendering.\n\n'
-exec node "$ROOT/game/server.mjs" "$@"
+exec node --env-file-if-exists="$ROOT/.env.local" "$ROOT/game/server.mjs" "$@"
