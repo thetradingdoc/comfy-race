@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "cityThemes": [
+    "nairobi",
+    "tokyo",
+    "new-york",
+    "london",
+    "moscow"
+  ],
+  "routeIds": [
+    "downtown",
+    "avenue",
+    "skyway"
+  ],
+  "vehiclePresets": [
+    {
+      "id": "matrix-street-default-v1",
+      "name": "Matrix standard road car",
+      "implemented": true
+    }
+  ],
+  "rulesPresets": [
+    {
+      "id": "native-checkpoint-sprint",
+      "name": "Native ordered-checkpoint sprint",
+      "implemented": true
+    }
+  ],
+  "presentationStyles": [
+    "motorsport",
+    "street"
+  ],
+  "limits": {
+    "id": 64,
+    "title": 100,
+    "briefing": 400,
+    "radioLine": 160,
+    "requestedStyle": 80
+  },
+  "nativeGeometryId": "matrix-city-v1",
+  "generatedPhysics": false,
+  "generatedMaps": false,
+  "liveAiRenderingVerified": false,
+  "notes": [
+    "City themes change briefing and presentation on the existing Matrix city; they do not load geographic city maps.",
+    "Motorsport presentation does not enable Formula vehicle geometry, physics, laps, tyre strategy or pit stops.",
+    "An imported manifest is untrusted configuration, not proof that ComfyUI generated or executed it."
+  ]
+}

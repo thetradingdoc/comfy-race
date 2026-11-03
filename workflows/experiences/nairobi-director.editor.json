@@ -1,0 +1,126 @@
+{
+  "config": {},
+  "extra": {
+    "comfy_mcp": {
+      "description": "Two-player native Matrix route briefing and motorsport presentation. Current street vehicle only; no invented Formula physics or geographical roads.",
+      "name": "Comfy Race - Nairobi Experience Director v1"
+    }
+  },
+  "groups": [
+    {
+      "bounding": [
+        -20,
+        -50,
+        355,
+        346
+      ],
+      "color": "#a1873f",
+      "flags": {},
+      "font_size": 24,
+      "title": "partner"
+    },
+    {
+      "bounding": [
+        415,
+        -50,
+        355,
+        178
+      ],
+      "color": "#9e4f4f",
+      "flags": {},
+      "font_size": 24,
+      "title": "text"
+    }
+  ],
+  "id": "773917d4-2c2e-43f3-b11e-7b27bf28ea6e",
+  "last_link_id": 1,
+  "last_node_id": 2,
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "nodes": [
+    {
+      "flags": {},
+      "id": 1,
+      "inputs": [],
+      "mode": 0,
+      "order": 0,
+      "outputs": [
+        {
+          "links": [
+            1
+          ],
+          "name": "STRING",
+          "slot_index": 0,
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        0,
+        0
+      ],
+      "properties": {},
+      "size": [
+        315,
+        276
+      ],
+      "title": "Comfy Race experience author",
+      "type": "GeminiNodeV3",
+      "widgets_values": [
+        "Gemini 3.1 Flash-Lite",
+        "Return exactly one JSON object, no Markdown. Author a two-human Comfy Race experience for a Nairobi-inspired motorsport broadcast. The REAL capabilities are: actual Matrix native city geometry (not geographic Nairobi); only street vehicle preset matrix-street-default-v1 (80 km/h cap); native checkpoint sprint rules; routes downtown, avenue, skyway. You cannot implement Formula cars, new roads, tyre simulation or pit stops. This pack selects an EXISTING native route and configures briefing, event radio and presentation. Choose route avenue for this pilot. Use precisely these fields and types: schemaVersion:1; id:\"nairobi-motorsport-pilot-v1\"; title:string(max80, avoid claiming actual Formula simulation); cityTheme:\"nairobi\"; routeId:\"avenue\"; vehiclePresetId:\"matrix-street-default-v1\"; rulesPresetId:\"native-checkpoint-sprint\"; presentation:{style:\"motorsport\",accent:\"#00B89C\"}; briefing:string(max400); radio:{start:string(max160),checkpoint:string(max160),finish:string(max160)}. No additional fields. Briefing should explain passing every native checkpoint and contact/recovery penalties, and call the setting Nairobi-inspired. Radio lines should be concise local-playback cues, not fake positions or results.",
+        "LOW",
+        0.2,
+        0.95,
+        1024,
+        42,
+        "fixed",
+        "You author constrained game experience manifests. Never invent unsupported engine capabilities. Respond only with strict JSON."
+      ]
+    },
+    {
+      "flags": {},
+      "id": 2,
+      "inputs": [
+        {
+          "link": 1,
+          "name": "text",
+          "type": "STRING"
+        }
+      ],
+      "mode": 0,
+      "order": 1,
+      "outputs": [
+        {
+          "links": null,
+          "name": "text",
+          "slot_index": 0,
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        435,
+        0
+      ],
+      "properties": {},
+      "size": [
+        315,
+        108
+      ],
+      "title": "Save validated-by-app experience JSON",
+      "type": "SaveText",
+      "widgets_values": [
+        "ComfyRace/experiences/nairobi-motorsport-pilot",
+        "json"
+      ]
+    }
+  ],
+  "version": 0.4
+}

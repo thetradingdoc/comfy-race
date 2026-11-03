@@ -1,0 +1,2 @@
+cmake==4.4.4
+pkgconf==3.0.7.post0

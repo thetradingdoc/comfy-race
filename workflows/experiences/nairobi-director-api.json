@@ -1,0 +1,32 @@
+{
+  "1": {
+    "class_type": "GeminiNodeV3",
+    "inputs": {
+      "model": "Gemini 3.1 Flash-Lite",
+      "model.prompt": "Return exactly one JSON object, no Markdown. Author a two-human Comfy Race experience for a Nairobi-inspired motorsport broadcast. The REAL capabilities are: actual Matrix native city geometry (not geographic Nairobi); only street vehicle preset matrix-street-default-v1 (80 km/h cap); native checkpoint sprint rules; routes downtown, avenue, skyway. You cannot implement Formula cars, new roads, tyre simulation or pit stops. This pack selects an EXISTING native route and configures briefing, event radio and presentation. Choose route avenue for this pilot. Use precisely these fields and types: schemaVersion:1; id:\"nairobi-motorsport-pilot-v1\"; title:string(max80, avoid claiming actual Formula simulation); cityTheme:\"nairobi\"; routeId:\"avenue\"; vehiclePresetId:\"matrix-street-default-v1\"; rulesPresetId:\"native-checkpoint-sprint\"; presentation:{style:\"motorsport\",accent:\"#00B89C\"}; briefing:string(max400); radio:{start:string(max160),checkpoint:string(max160),finish:string(max160)}. No additional fields. Briefing should explain passing every native checkpoint and contact/recovery penalties, and call the setting Nairobi-inspired. Radio lines should be concise local-playback cues, not fake positions or results.",
+      "model.thinking_level": "LOW",
+      "model.temperature": 0.2,
+      "model.top_p": 0.95,
+      "model.max_output_tokens": 1024,
+      "model.seed": 42,
+      "model.system_prompt": "You author constrained game experience manifests. Never invent unsupported engine capabilities. Respond only with strict JSON."
+    },
+    "_meta": {
+      "title": "Comfy Race experience author"
+    }
+  },
+  "2": {
+    "class_type": "SaveText",
+    "inputs": {
+      "text": [
+        "1",
+        0
+      ],
+      "filename_prefix": "ComfyRace/experiences/nairobi-motorsport-pilot",
+      "format": "json"
+    },
+    "_meta": {
+      "title": "Save validated-by-app experience JSON"
+    }
+  }
+}

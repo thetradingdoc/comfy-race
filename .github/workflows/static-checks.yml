@@ -6,12 +6,21 @@ on:
       - "scripts/**"
       - "tests/**"
       - "workflows/**"
+      - "src/**"
+      - "pyproject.toml"
+      - "game/**"
+      - "native/**"
       - ".github/workflows/static-checks.yml"
   pull_request:
     paths:
       - "scripts/**"
       - "tests/**"
       - "workflows/**"
+      - "src/**"
+      - "pyproject.toml"
+      - "game/**"
+      - "native/**"
+      - ".github/workflows/static-checks.yml"
 
 jobs:
   validate:
@@ -22,8 +31,24 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile Python
-        run: python -m compileall -q scripts tests
+        run: python -m compileall -q scripts tests src native
       - name: Test validator
         run: python -m unittest discover -s tests -v
       - name: Audit live workflow API graph
         run: python scripts/check_workflow.py workflows/comfy-race-sd15-depth-api.json
+
+  multiplayer-gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - run: npm ci
+        working-directory: game
+      - run: npm test
+        working-directory: game
+      - run: npm run build
+        working-directory: game

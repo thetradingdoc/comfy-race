@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "nairobi-motorsport-pilot-v1",
+  "title": "Nairobi Street Sprint: Avenue Challenge",
+  "cityTheme": "nairobi",
+  "routeId": "avenue",
+  "vehiclePresetId": "matrix-street-default-v1",
+  "rulesPresetId": "native-checkpoint-sprint",
+  "presentation": {
+    "style": "motorsport",
+    "accent": "#00B89C"
+  },
+  "briefing": "Welcome to this Nairobi-inspired street sprint. Navigate the Avenue route by hitting every native checkpoint in sequence. Precision is key; heavy contact with traffic or barriers will trigger a recovery penalty, slowing your momentum. Keep your speed steady and your lines clean to secure the fastest time on the leaderboard.",
+  "radio": {
+    "start": "Green flag is out. Keep it clean and watch your lines on the Avenue.",
+    "checkpoint": "Checkpoint cleared. Maintain your pace.",
+    "finish": "Chequered flag. Return to the paddock."
+  }
+}

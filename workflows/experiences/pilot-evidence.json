@@ -1,0 +1,35 @@
+{
+  "verifiedDate": "2026-11-02",
+  "workflowId": "e34071ee-1a6d-4c8b-8783-3646d19db617",
+  "workflowUrl": "https://cloud.comfy.org/#e34071ee-1a6d-4c8b-8783-3646d19db617",
+  "promptId": "04eb4f8e-dd10-44a9-8d33-e418d8c804b5",
+  "status": "completed",
+  "model": "Gemini 3.1 Flash-Lite",
+  "maxOutputTokens": 1024,
+  "nodes": [
+    "GeminiNodeV3",
+    "SaveText"
+  ],
+  "cloudCatalogNodeCount": 3858,
+  "dryRun": "passed",
+  "schemaValidation": "passed",
+  "actualCreditsUsed": "not retrieved; one text job explicitly approved",
+  "generatedOutput": "examples/nairobi-pilot.generated.json",
+  "reviewedOutput": "examples/nairobi-pilot.reviewed.json",
+  "reviewChanges": [
+    "Corrected briefing to separate native contact penalties from manual recovery penalty.",
+    "Removed unsupported paddock instruction from finish radio."
+  ],
+  "verifiedCapabilities": [
+    "Cloud workflow execution",
+    "JSON artifact generation",
+    "local manifest schema compatibility"
+  ],
+  "notVerified": [
+    "rendered two-phone race",
+    "Formula vehicle or physics",
+    "new geographical city map",
+    "live AI video rendering",
+    "generated audio playback"
+  ]
+}

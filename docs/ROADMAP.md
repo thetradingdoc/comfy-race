@@ -1,13 +1,11 @@
-# Comfy Race roadmap — live ComfyUI renderer
+# Comfy Race roadmap
 
-This is a proposal, not a completed application. See [BUILD_PLAN.md](BUILD_PLAN.md) for detailed acceptance criteria and system design.
+1. **Native foundation:** build and run the actual Matrix race server and verified racing assets.
+2. **Multiplayer acceptance:** two people, one shared native world, phone controls, two projector views, pause/reconnect/recovery and a complete route.
+3. **UI polish:** original racing presentation, simple QR onboarding, readable native HUD and actual results.
+4. **Story workflows:** real Comfy text generation -> validated mission manifest -> shared gameplay objectives/events. Start with one Nairobi-inspired chapter.
+5. **Optional live AI:** configured ComfyStream GPU -> real transformed native frames -> measured road fidelity, latency and frame delivery. Explicit engine rendering remains available.
+6. **Release:** second-machine setup, venue rehearsal, licenses, truthful demo and submission.
+7. **Campaigns:** optional playable advertising preset on the same story/race system.
 
-1. **G0 — Native proof:** Mac build of CitySampleBBoxGame, one route driven, licensed assets and build log.
-2. **G1 — Comfy proof:** Deploy configurable NVIDIA GPU; run actual ComfyStream ComfyUI workflow on live video; verify its output changes frames.
-3. **G2 — Integration:** Run native game window -> OBS Virtual Camera -> ComfyStream -> ComfyUI -> WebRTC projector; no player camera.
-4. **G3 — Playability or stop:** Pilot a course entirely from AI output; measure presented FPS, p95 input-to-photo latency and stalls. A failed performance gate invalidates the planned live AI game demonstration.
-5. **G4 — Product quality:** One fixed visual style; playable game geometry; diagnostic reference; proper upstream attribution.
-6. **G5 — Optional controls:** Phone UI, authenticated WebSocket, safe latest-input handling in `MainSDL.cpp`, reconnect; only after G3.
-7. **G6 — Release:** Exact setup on one tested GPU, API-format workflow JSON, model/asset manifests, 2-minute authentic demo and submission.
-
-**Out of scope:** multiplayer, artificial replay, accurate new city levels, freely changing prompt/world, Matrix's native 5B neural renderer, and claim that API credits equal a persistent GPU.
+The default room is two humans; five-human capacity and high native source resolutions need benchmarks. City story labels do not create geographic road geometry. Current task states are in [the build tracker](BUILD_PLAN.md).

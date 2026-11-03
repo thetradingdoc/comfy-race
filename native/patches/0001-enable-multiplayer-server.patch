@@ -1,0 +1,27 @@
+diff --git a/Matrix-Game-4/game/racing/CMakeLists.txt b/Matrix-Game-4/game/racing/CMakeLists.txt
+index 400a2f7..a22cf63 100644
+--- a/Matrix-Game-4/game/racing/CMakeLists.txt
++++ b/Matrix-Game-4/game/racing/CMakeLists.txt
+@@ -27,10 +27,12 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+ endif()
+ add_executable(CitySampleReferenceServer src/ReferenceServerMain.cpp)
+ target_link_libraries(CitySampleReferenceServer PRIVATE RacingCore)
++add_executable(CitySampleRaceServer src/RaceServerMain.cpp src/VideoEncoder.cpp)
++target_link_libraries(CitySampleRaceServer PRIVATE RacingCore PkgConfig::AVCODEC)
+ add_executable(CitySampleBBoxGame src/MainSDL.cpp src/OfflineRecorder.cpp src/VehicleAudio.cpp
+   src/LatencyDemo.cpp src/ReferenceDemo.cpp src/VideoEncoder.cpp src/ViewRecorder.cpp)
+ target_link_libraries(CitySampleBBoxGame PRIVATE RacingCore PkgConfig::AVCODEC)
+-set_target_properties(CitySampleReferenceServer CitySampleBBoxGame PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
++set_target_properties(CitySampleReferenceServer CitySampleRaceServer CitySampleBBoxGame PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+ include(CTest)
+ set(RACING_ASSET_ROOT "" CACHE PATH "Directory containing the racing assets folder")
+ if(BUILD_TESTING)
+@@ -39,7 +41,7 @@ if(BUILD_TESTING)
+     target_include_directories(test-${name} PRIVATE src)
+     add_test(NAME racing-${name} COMMAND test-${name})
+   endforeach()
+-  foreach(name caption local-race pursuit reference-presentation)
++  foreach(name caption local-race pursuit reference-presentation race)
+     add_executable(test-${name} tools/${name}-tests.cpp)
+     target_link_libraries(test-${name} PRIVATE RacingCore)
+     if(RACING_ASSET_ROOT)

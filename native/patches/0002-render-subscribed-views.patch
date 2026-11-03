@@ -1,0 +1,22 @@
+diff --git a/Matrix-Game-4/game/racing/src/RaceServerMain.cpp b/Matrix-Game-4/game/racing/src/RaceServerMain.cpp
+index f3f23c5..eb5e883 100644
+--- a/Matrix-Game-4/game/racing/src/RaceServerMain.cpp
++++ b/Matrix-Game-4/game/racing/src/RaceServerMain.cpp
+@@ -70,6 +70,8 @@ public:
+         if(pending){if(reusable.size()<2)reusable.push_back(std::move(pending->rgba));pending.reset();++dropped;}cv.notify_one();}
+     void grant(uint64_t id,int count){std::lock_guard lock(mutex);if(id==generation){credits=std::min(creditLimit,credits+count);cv.notify_one();}}
+     void close(uint64_t id){std::lock_guard lock(mutex);if(id==generation)credits=creditLimit=0;}
++    // Controller focus is independent of media: phones may drive without video.
++    bool subscribed(){std::lock_guard lock(mutex);return creditLimit>0;}
+     std::vector<uint8_t> takeBuffer(){std::lock_guard lock(mutex);if(reusable.empty())return {};auto buffer=std::move(reusable.back());reusable.pop_back();return buffer;}
+     void submit(Job job){std::lock_guard lock(mutex);if(pending){++dropped;if(reusable.size()<2)reusable.push_back(std::move(pending->rgba));}pending=std::move(job);cv.notify_one();}
+ };
+@@ -172,7 +174,7 @@ int main(int argc,char** argv){
+             std::vector<DrawObject> objects;std::vector<View> views;RouteGuide guide;std::string capture;int captureId=0;
+             {std::lock_guard lock(worldMutex);snapshotBegin=now();objects=world.drawObjects();guide=race.route().guide;
+                 captureId=capturePlayer.load();capture=captureRequest;
+-                for(const auto& p:race.players())if(p&&p->connected&&(p->visible||p->id==captureId)){
++                for(const auto& p:race.players())if(p&&p->connected&&((p->visible&&streams[p->slot]->subscribed())||p->id==captureId)){
+                     View view;view.id=p->id;view.slot=p->slot;view.camera=world.playerCamera(p->slot,p->camera,p->lookBack);auto pose=world.playerPose(p->slot);auto& hud=view.hud;
+                     hud.visible=true;hud.race=true;hud.playerNumber=int(p->slot+1);hud.speed=pose.speed;hud.heading=pose.heading;hud.location=position(pose.body);hud.elapsed=p->progress.elapsed;hud.penalty=p->progress.penalty;hud.finished=p->progress.finished;
+                     hud.nextCheckpoint=int(p->progress.next);hud.totalCheckpoints=int(race.route().checkpoints.size());hud.notice=p->notice;hud.racePhase=race.phase();std::transform(hud.racePhase.begin(),hud.racePhase.end(),hud.racePhase.begin(),[](unsigned char c){return char(std::toupper(c));});
