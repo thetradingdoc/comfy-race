@@ -26,7 +26,9 @@ Double-click **Run Comfy Race.command**, or run from this repository:
 bash scripts/run_game.sh
 ~~~
 
-Open **http://localhost:8093**. Create a room on the shared screen. A second player scans the QR code on the same Wi-Fi and selects phone-controller mode. Both players confirm ready; the host starts.
+Open **http://localhost:8093** on the laptop to find its LAN join address. Phone one opens the game on that LAN address and creates a room in controller mode; phone two scans its QR code and joins. On the laptop choose **Open the shared screen** and enter the room code. The projector watches both native cameras without taking a driver slot. Both phones confirm ready; the phone host starts.
+
+The phone host can choose **Load reviewed Nairobi pilot** before starting. This applies saved output from our tested Comfy workflow, selects the actual Avenue route and configures the shared briefing, presentation and radio text. It submits no new generation. See [the tested workflow and artifacts](workflows/experiences/README.md).
 
 Controls: W/S or arrows for throttle/reverse, A/D or arrows to steer, Space to brake. Recovery adds the native five-second penalty. A disconnect pauses the race; reconnect, confirm ready on both devices, then let the host resume.
 
@@ -52,7 +54,9 @@ Two workflows are intended:
 1. **Story authoring:** city/mission brief -> validated mission manifest -> objectives, checkpoint events, narration and chapter progression used during multiplayer play.
 2. **Optional live rendering:** native game frames -> ComfyStream -> ComfyUI workflow -> generated view during play.
 
-Current city chapters are **authored starter stories** tied to native checkpoint progress. They are not generated stories or new geographical maps. The story-authoring graph and mission interpreter remain work to build. The existing SD1.5/depth graph is a candidate visual renderer.
+Starter city chapters remain authored presets. A real Cloud text workflow has now generated and saved a Nairobi experience manifest, with a reviewed example that the host can apply. The manifest selects supported native routes and supplies briefing/presentation/radio text; it does not generate new vehicle physics or geographical maps. The existing SD1.5/depth graph remains a candidate live visual renderer.
+
+The [F1 feasibility review](docs/F1_EXPERIENCE_FEASIBILITY.md) explains how street/open-wheel classes and city experiences could grow, what the supplied timing-tower ZIP actually does, and which engine integrations remain necessary.
 
 No credits or API keys are required for native racing. Later live rendering requires a running, compatible ComfyStream GPU endpoint; a browser trial or key alone does not supply this service.
 

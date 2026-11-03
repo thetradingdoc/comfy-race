@@ -28,14 +28,17 @@ import os
 from comfy_sdk import Comfy
 
 os.environ["COMFY_BASE_URL"] = "https://cloud.comfy.org"
-client = Comfy(api_key=os.environ["COMFY_API_KEY"])
+key = os.environ["COMFY_API_KEY"]
+client = Comfy(api_key=key)
 wf = client.workflows.from_file("workflow_api.json")
-job = client.run(wf)  # This submits a real workflow and can consume credits.
+job = client.run(wf, api_key=key)  # Partner nodes also need per-run authentication.
 for output in job.outputs:
     output.to_file(output.name)
 ```
 
 The workflow file must be exported in API format and use models/nodes available on the target Cloud service. The repository's TensorRT/depth graph is a candidate ComfyStream workflow, not a verified Cloud workflow.
+
+The constructor authenticates the Cloud client. Per-run api_key authenticates partner nodes such as Gemini inside the graph; it is often the same workspace key. Running a workflow can consume credits. The tested text graph is in workflows/experiences.
 
 ## Screenshots and providers
 

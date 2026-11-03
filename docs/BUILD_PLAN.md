@@ -24,13 +24,13 @@ Code delivered, a passing unit test and successful human gameplay are different 
 | M12 | UI | Native split view, route HUD, stalled/error states | Implemented; actual JPEG/rendered driving proof pending |
 | M13 | UI | Native results, recovery, rematch | Implemented; complete a human-driven route |
 | M14 | Release | Desktop launcher and reproducible setup | Delivered; second-machine clean reproduction pending |
-| M15 | Verification | WebSocket routing/phone-no-video test | Written; automated shell denies loopback bind |
+| M15 | Verification | WebSocket routing/phone-no-video test | Passed locally, including two phone sessions plus a projector without a third slot; fixture transport, not rendered gameplay |
 | M16 | Verification | Actual native IPC/media/control smoke | Written; desktop OpenGL execution pending |
-| S01 | Story | Versioned mission schema and supported actions | Planned |
-| S02 | Story | Pin real Comfy text graph/model | Planned; hardware/license choice and real execution needed |
-| S03 | Story | Validate generated mission against native route catalog | Planned; reject impossible gates/actions and arbitrary code |
-| S04 | Story | Freeze approved mission/version across all racers | Planned; deterministic event interpretation required |
-| S05 | Story | Voice/cues/chapter progression during play | Planned |
+| S01 | Story | Versioned mission schema and supported actions | Implemented bounded experience schema; native route selection, briefing/presentation/radio text; general mission scripting remains future work |
+| S02 | Story | Real Comfy text graph/model | One Gemini 3.1 Flash-Lite -> SaveText pilot completed after explicit approval; actual output preserved and reviewed |
+| S03 | Story | Validate generated mission against native route catalog | Strict validator/tests pass; unsupported vehicles/maps/physics rejected; language still needs host review |
+| S04 | Story | Freeze approved mission/version across all racers | Implemented shared immutable hash/configuration until reset; native route selection tested through contract fixture |
+| S05 | Story | Voice/cues/chapter progression during play | Radio text follows native events; generated audio and general chapter logic remain pending |
 | C01 | Cloud setup | Private API key configuration and read-only authentication | Verified locally: GET /api/user returned HTTP 200; no generation submitted |
 | A01 | Live AI | Configure ComfyStream GPU/models/network | Waiting for configured service |
 | A02 | Live AI | Capture native canvas, signaling, returned video | Implemented; GPU unverified |
@@ -41,10 +41,13 @@ Code delivered, a passing unit test and successful human gameplay are different 
 | P02 | Polish | Five humans / higher native resolution | Deferred until measured; 4K canvas is not 4K source |
 | P03 | Release | Venue rehearsal, authentic demo, licenses/submission | Pending |
 | AD01 | Campaigns | Playable advertising preset | Optional after shared multiplayer/story core |
+| F01 | Driving classes | Actual open-wheel proxy and Formula-inspired arcade handling | Native work required; current road car and 80 km/h cap remain |
+| F02 | Cities | Geographic roads, collision and lane graph | Native asset/map engineering required; city prompts alone cannot provide it |
+| F03 | Broadcast | Accurate continuous intervals, tyres/pits/multi-lap circuits | Current tower shows checkpoint progress and native finishes; extra mechanics/instrumentation not implemented |
 
 ## Work backward from the UI
 
-**Host/projector:** choose chapter -> create room -> QR/roster -> ready/countdown -> two native driver views -> native results/rematch.
+**Two-phone flow:** phone one hosts -> phone two joins QR -> laptop opens projector spectator link/code -> host applies reviewed experience -> both phones ready -> phone host starts -> two native camera views -> native results/rematch. The projector consumes no driver slot.
 
 **Phone:** nickname/accent -> ready -> steering/throttle/brake + objective/position -> reconnect/ready after interruption -> results. No per-phone video stream.
 
@@ -65,9 +68,9 @@ flowchart LR
 
 ## Storyline value
 
-Current chapter names select authored narrative presets on the existing Matrix city. Dispatch text follows native gate progress. This is a starter layer, not a generated mission system.
+Starter chapter names select authored narrative presets. A tested Cloud workflow now produces a bounded experience manifest that the host can load; it changes a supported native route and shared briefing/presentation/radio text. This is not arbitrary generated rules or geography.
 
-Next: city/mission brief -> real Comfy text model -> validated manifest -> supported route/objective/scoring configuration -> shared runtime events. The workflow must affect play. A generated paragraph or cosmetic city label alone does not establish generated gameplay.
+The tested path is city brief -> Comfy text model -> validated manifest -> supported native route and shared presentation/radio text. General objective/scoring changes require additional native mission adapters. A generated paragraph or cosmetic city label alone does not establish generated gameplay.
 
 The [official TextGenerate docs](https://github.com/Comfy-Org/docs/blob/main/built-in-nodes/TextGenerate.mdx) describe text output. [ComfyUI Ollama](https://github.com/stavsap/comfyui-ollama) is a local-model integration candidate. Neither is installed or benchmarked for this app. A paid API is not inherently required for local text inference.
 

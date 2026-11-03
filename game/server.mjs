@@ -8,6 +8,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import QRCode from 'qrcode';
 import { NativeMatrix, inspectNative } from './lib/native.mjs';
 import { MatrixRoom, fail } from './lib/room.mjs';
+import { EXPERIENCE_CAPABILITIES, validateExperienceManifest } from './lib/experience.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.webp': 'image/webp', '.woff2': 'font/woff2', '.mp3': 'audio/mpeg' };
@@ -32,6 +33,19 @@ export function createRaceServer({ publicDir = process.env.PUBLIC_DIR || resolve
     try {
       const url = new URL(req.url || '/', 'http://localhost');
       if (apiHandler && await apiHandler(req, res)) return;
+      if (url.pathname === '/api/experience/examples/nairobi-pilot') {
+        if (req.method !== 'GET') { json(res, 405, { error: 'Method not allowed.' }); return; }
+        try {
+          const file = resolve(ROOT, '../workflows/experiences/examples/nairobi-pilot.reviewed.json');
+          const manifest = validateExperienceManifest(JSON.parse(await readFile(file, 'utf8')));
+          json(res, 200, manifest);
+        } catch { json(res, 503, { error: 'Reviewed pilot manifest is unavailable.' }); }
+        return;
+      }
+      if (url.pathname === '/api/experience/capabilities') {
+        if (req.method !== 'GET') { json(res, 405, { error: 'Method not allowed.' }); return; }
+        json(res, 200, EXPERIENCE_CAPABILITIES); return;
+      }
       if (url.pathname === '/api/status') {
         const native = await inspectNative(config);
         const bound = httpServer.address();
@@ -170,6 +184,7 @@ export function createRaceServer({ publicDir = process.env.PUBLIC_DIR || resolve
             case 'start': await room.start(id); break;
             case 'reset': await room.reset(id, message.city, message.routeId); break;
             case 'recover': await room.recover(id); break;
+            case 'apply_experience': await room.applyExperience(id, message.manifest); break;
             default: fail('UNKNOWN_MESSAGE', 'Unknown action.');
           }
         });

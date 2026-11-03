@@ -7,13 +7,14 @@ Updated 2 November 2026. Actual Matrix engine, two-human gateway/UI, optional Co
 - Official source pin and all 13 racing asset SHA256/size checks.
 - Mac builds of CitySampleRaceServer and upstream test-race.
 - Upstream native rules test: navigation, shared physics, independent controls, pause/reconnect/recovery.
-- Ten pure Node contract/session tests.
+- Nineteen Node tests, including strict experience validation and two phone drivers plus a projector spectator using a synthetic native transport fixture.
+- Twenty existing Python tests, including HTTP checks. The earlier loopback EPERM restriction is resolved for these checks.
 - Vite production build and browser review of the landing interface.
-- Comfy Cloud authentication: private local credentials configured; GET /api/user returned HTTP 200. No workflow was submitted and no generation or entitlement claim follows from this check.
+- Comfy Cloud authentication and one explicitly approved Gemini text pilot. The saved two-node workflow completed, its real JSON output passes the app validator, and a reviewed example corrects misleading penalty wording. No image/video/audio/3D generation was run.
 
 ## Delivered, runtime acceptance pending
 
-Native IPC gateway; host/room/ready/start/reset; two projector camera subscriptions; phone telemetry/touch controls; reconnect credentials; pause/resume; recovery/results; local QR; explicit leave/room cleanup; native patches and desktop launcher.
+Native IPC gateway; host/room/ready/start/reset; projector spectator with no driver slot; two camera subscriptions; phone telemetry/touch controls and host resume; reconnect credentials; recovery/results; local QR; explicit leave/room cleanup; native patches and desktop launcher. The host can load the reviewed pilot or import a bounded manifest. The gateway validates it, selects an existing native route and freezes one shared configuration/hash. A motorsport timing tower and radio text use native events.
 
 Optional Comfy capture/signaling/returned-video module is implemented. No real GPU execution is verified.
 
@@ -21,10 +22,10 @@ Optional Comfy capture/signaling/returned-video module is implemented. No real G
 
 Rendered native startup fails before hello: SDL reports “The video driver did not add any displays”. The automated shell lacks macOS desktop access. Desktop automation also refuses Terminal. Run **Run Comfy Race.command** directly in the desktop session.
 
-The WebSocket integration test is written but the shell denies loopback bind (EPERM). Ten pure Node tests pass; the complete eleven-test suite is not reported green. Its synthetic transport fixture verifies routing, not gameplay.
+The complete local Node and Python suites now pass. WebSocket tests use a synthetic native transport to verify roles, routing and phone payload separation; they are not evidence of rendered gameplay.
 
 The opt-in native smoke script checks two real slots, independent movement, two JPEG streams and reconnect/resume. It has not passed because the renderer cannot open a display in this execution environment.
 
-No generated story graph/interpreter, native audio integration, rendered two-human playthrough, five-human capacity proof, 4K native-source benchmark or live AI playability measurement is verified.
+The bounded text-authoring graph and manifest application are verified at the Cloud/contract level. General mission scripting, Formula cars/handling, new geographical maps, native audio integration, rendered two-human playthrough, five-human capacity, native 4K performance and live AI playability remain unverified or unimplemented.
 
 See [the tracker](BUILD_PLAN.md).

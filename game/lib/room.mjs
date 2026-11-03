@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { EventEmitter } from 'node:events';
+import { experienceRecord } from './experience.mjs';
 
 const PALETTE = ['#61e6ad', '#ff8a63', '#a891ff', '#60c8ff', '#ffcf69'];
 export const CITIES = {
@@ -24,6 +25,7 @@ export class MatrixRoom extends EventEmitter {
     this.city = Object.hasOwn(CITIES, city) ? city : 'nairobi';
     this.maxPlayers = maxPlayers; this.members = new Map(); this.videoPlayers = new Map();
     this.hostId = null; this.error = null; this.starting = false; this.closed = false;
+    this.experience = null;
     this.createdAt = Date.now(); this.lastActive = Date.now(); this.queue = Promise.resolve();
     this.native.on('state', state => {
       if (state.phase === 'paused' && this.previousPhase !== 'paused') for (const member of this.members.values()) member.ready = false;
@@ -103,6 +105,7 @@ export class MatrixRoom extends EventEmitter {
   async start(id) {
     this.requireHost(id);
     if (!['lobby', 'paused'].includes(this.native.state?.phase)) fail('RACE_STARTED', 'Restart the room before another race.');
+    if (this.experience && this.native.state.route_id !== this.experience.routeId) fail('EXPERIENCE_MISMATCH', 'The native route no longer matches the approved experience. Reset the room.');
     const members = [...this.members.values()];
     if (members.filter(player => player.connected).length < 2) fail('NEED_TWO_PLAYERS', 'Two connected human drivers are required. Share the room QR code.');
     if (members.some(player => !player.connected || !player.ready)) fail('PLAYERS_NOT_READY', 'Every driver must reconnect and confirm ready.');
@@ -121,10 +124,27 @@ export class MatrixRoom extends EventEmitter {
     if (!['lobby', 'results'].includes(this.native.state?.phase)) await this.native.command({ type: 'end_race', player_id });
     await this.native.command({ type: 'next_race', player_id });
     if (routeId) await this.native.command({ type: 'select_route', player_id, route_id: routeId });
-    if (Object.hasOwn(CITIES, city || '')) this.city = city;
     for (const member of this.members.values()) { member.ready = false; member.seq = -1; }
     await this.native.waitState(state => state.phase === 'lobby' && state.epoch > oldEpoch && (!routeId || state.route_id === routeId));
+    if (Object.hasOwn(CITIES, city || '')) this.city = city;
+    this.experience = null;
     this.lastActive = Date.now();
+  }
+  async applyExperience(id, input) {
+    this.requireHost(id);
+    if (this.closed || this.error) fail('NATIVE_UNAVAILABLE', 'The native world is unavailable. Create a new room.');
+    if (this.native.state?.phase !== 'lobby' || this.starting) fail('EXPERIENCE_PHASE', 'Apply an experience in the lobby before countdown.');
+    if (this.experience) fail('EXPERIENCE_LOCKED', 'This experience is frozen for the heat. Reset the room before choosing another.');
+    const experience = experienceRecord(input);
+    if (!this.native.state.routes?.some(route => route.id === experience.routeId)) fail('UNSUPPORTED_EXPERIENCE', 'The requested route is not loaded in this native world.');
+    const oldEpoch = this.native.state.epoch;
+    for (const member of this.members.values()) member.ready = false;
+    await this.native.command({ type: 'select_route', player_id: Number(id), route_id: experience.routeId });
+    await this.native.waitState(state => state.phase === 'lobby' && state.epoch > oldEpoch && state.route_id === experience.routeId);
+    this.experience = experience;
+    this.city = experience.cityTheme;
+    this.lastActive = Date.now();
+    return experience;
   }
   async recover(id) {
     await this.native.command({ type: 'recover', player_id: Number(id), request_id: randomBytes(12).toString('hex'), ...this.epoch() });
@@ -182,7 +202,8 @@ export class MatrixRoom extends EventEmitter {
       code: this.code, phase: this.error ? 'error' : this.starting ? 'starting' : state.phase,
       hostId: this.hostId, city: this.city, cityName: CITIES[this.city].name,
       locationMode: 'story-preset', map: 'Matrix CitySample native city',
-      mission: { id: `${this.city}-authored-v1`, source: 'authored', name: CITIES[this.city].title, briefing: CITIES[this.city].briefing },
+      mission: this.experience ? { id: this.experience.id, source: this.experience.source, name: this.experience.title, briefing: this.experience.briefing } : { id: `${this.city}-authored-v1`, source: 'authored', name: CITIES[this.city].title, briefing: CITIES[this.city].briefing },
+      experience: this.experience,
       laps: 1, routeId: state.route_id, routes: state.routes, checkpointCount,
       raceId: state.race_id, epoch: state.epoch, countdown: state.countdown || 0,
       elapsed: Math.max(0, ...members.map(player => player.elapsed)), remaining: null,
